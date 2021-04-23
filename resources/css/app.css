@@ -2,4 +2,5 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-@import 'w3.css'
+@import 'common.css';
+@import 'w3.css';
