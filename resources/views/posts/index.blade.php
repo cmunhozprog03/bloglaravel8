@@ -19,7 +19,7 @@
               
 
               <h1 class="text-4xl text-white leading-10 font-semibold">
-                <a href="">
+                <a href="{{ route('posts.show', $post) }}">
                   {{ $post->name }}
                 </a>
               </h1>
