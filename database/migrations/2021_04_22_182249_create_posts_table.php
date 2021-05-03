@@ -20,8 +20,10 @@ class CreatePostsTable extends Migration
 
             $table->string('name');
             $table->string('slug');
-            $table->string('extract');
-            $table->longText('body');
+
+            $table->string('extract')->nullable();
+            $table->longText('body')->nullable();
+
             $table->enum('status', [1, 2])->default(1);
             $table->timestamps();
         });
