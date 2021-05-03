@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StorePostResquest;
+use App\Http\Requests\PostResquest;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
@@ -44,7 +44,7 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePostResquest $request)
+    public function store(PostResquest $request)
     {
         //return Storage::put('posts', $request->file('file'));
         $post = Post::create($request->all());
@@ -99,9 +99,31 @@ class PostController extends Controller
      * @param  int  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(PostResquest $request, Post $post)
     {
-        //
+        $post->update($request->all());
+
+        if($request->file('file')){
+            $url = Storage::put('posts', $request->file('file'));
+
+            if($post->image){
+                Storage::delete($post->image->url);
+
+                $post->image->update([
+                    'url' => $url
+                ]);
+            } else {
+                $post->image()->create([
+                    'url' => $url
+                ]);
+            }
+        }
+        if($request->tags){
+            $post->tags()->sync($request->tags);
+
+       }
+        return redirect()->route('admin.posts.edit', $post)
+                         ->with('info', 'O post foi atualizado com sucesso');
     }
 
     /**
@@ -112,6 +134,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return redirect()->route('admin.posts.index')
+                         ->with('info', 'O post foi excuído com sucesso');
     }
 }
