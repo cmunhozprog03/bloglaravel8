@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -45,10 +46,22 @@ class PostController extends Controller
      */
     public function store(StorePostResquest $request)
     {
+        //return Storage::put('posts', $request->file('file'));
         $post = Post::create($request->all());
+        
+        if($request->file('file')){
+            $url = Storage::put('posts', $request->file('file'));
+
+            $post->image()->create([
+                'url' => $url
+            ]);
+        }
+
+        
 
         if($request->tags){
-            $post->tags()->attach($request->tags);
+             $post->tags()->attach($request->tags);
+
         }
 
         return redirect()->route('admin.posts.edit', $post);
@@ -73,7 +86,10 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('admin.posts.edit', compact('post'));
+        $categories = Category::pluck('name', 'id');
+        $tags = Tag::orderBy('name')->get();
+
+        return view('admin.posts.edit', compact('post', 'categories', 'tags'));
     }
 
     /**

@@ -1,7 +1,11 @@
 @props(['post'])
 
 <article class="mb-8 bg-white shadow-lg rounded-lg overflow-hidden">  
-  <img class="w-full h-72 object-cover object-center" src="{{ Storage::url($post->image->url) }}" alt="">
+  @if ($post->image)
+    <img class="w-full h-72 object-cover object-center" src="{{ Storage::url($post->image->url) }}" alt="">
+  @else
+    <img class="w-full h-72 object-cover object-center" src="https://cdn.pixabay.com/photo/2020/09/29/23/50/windmills-5614160_960_720.jpg" alt=""> 
+  @endif
   
   <div class="py-4 px-8">
     <h1>
@@ -11,7 +15,7 @@
     </h1>
     {{-- Extract --}}
     <div class="text-gray-800 text-base">
-      {{ $post->extract }}
+      {!! $post->extract !!}
     </div>
 
     {{-- Tags --}}
