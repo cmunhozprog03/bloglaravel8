@@ -86,7 +86,7 @@ return [
     'layout_topnav' => null,
     'layout_boxed' => null,
     'layout_fixed_sidebar' => true,
-    'layout_fixed_navbar' => null,
+    'layout_fixed_navbar' => true,
     'layout_fixed_footer' => null,
 
     /*
@@ -238,20 +238,39 @@ return [
             'text'        => 'Dashboard',
             'route'         => 'admin.home',
             'icon'        => 'fas fa-fw fa-tachometer-alt',
+            'can'  => 'admin.home',
             
         ],
-        ['header' => 'ADMINISTRADOR'],
+        [
+            'text'        => 'Usuários',
+            'route'         => 'admin.users.index',
+            'icon'        => 'fas fa-fw fa-users',
+            'active'    => ['admin/users*'],
+            'can'       => 'admin.users.index',
+            
+        ],
+        [
+            'text'        => 'Lista de Roles',
+            'route'         => 'admin.roles.index',
+            'icon'        => 'fas fa-fw fa-users-cog',
+            'active'    => ['admin/roles*'],
+            // 'can'       => 'admin.users.index',
+            
+        ],
+        
         [
             'text' => 'Categorias',
             'route'  => 'admin.categories.index',
             'icon' => 'fab fa-fw fa-buffer',
             'active' => ['admin/categories*'],
+            'can'       => 'admin.categories.index',
         ],
         [
             'text' => 'Etiquetas',
             'route'  => 'admin.tags.index',
             'icon' => 'far fa-fw fa-bookmark',
             'active' => ['admin/tag*'],
+            'can'       => 'admin.tags.index',
         ],
         
         ['header' => 'OPÇÕES DE BLOG'],
@@ -259,11 +278,13 @@ return [
             'text'       => 'Lista de posts',
             'route'      => 'admin.posts.index',
             'icon'       =>  'fas fa-fw fa-clipboard',
+            'can'       => 'admin.posts.index',
         ],
         [
             'text'       => 'Criar novo post',
             'route'      => 'admin.posts.create',
             'icon'       =>  'fas fa-fw fa-file',
+            'can'       => 'admin.posts.create',
         ],
         
     ],

@@ -8,33 +8,28 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        $this->middleware('can:admin.categories.index')->only('index');
+        $this->middleware('can:admin.categories.create')->only('create', 'store');
+        $this->middleware('can:admin.categories.edit')->only('edit', 'update');
+        $this->middleware('can:admin.categories.destroy')->only('destroy');
+    }
+
+    
     public function index()
     {
         $categories = Category::orderBy('name')->paginate(10);
         return view('admin.categories.index', compact('categories'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
     public function create()
     {
         return view('admin.categories.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    
     public function store(Request $request)
     {
         $request->validate([
@@ -47,35 +42,12 @@ class CategoryController extends Controller
         return view('admin.categories.edit', compact('category'))->with('info', 'A categoria foi atualizada com sucesso!');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Category $category)
-    {
-        return view('admin.categories.show', compact('category'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $category
-     * @return \Illuminate\Http\Response
-     */
+   
     public function edit(Category $category)
     {
         return view('admin.categories.edit', compact('category'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $category
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request,Category $category)
     {
         $request->validate([
@@ -88,12 +60,7 @@ class CategoryController extends Controller
         return view('admin.categories.edit', compact('category'))->with('info', 'A categoria foi atualizada com sucesso!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $category
-     * @return \Illuminate\Http\Response
-     */
+    
     public function destroy(Category $category)
     {
         $category->delete();
